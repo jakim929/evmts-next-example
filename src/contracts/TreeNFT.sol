@@ -26,14 +26,14 @@ contract TreeNFT is Owned, ERC721, SchemaResolver {
         require(msg.sender == eas, "TreeNFT: only EAS can call this function");
         require(attestation.attester == owner, "TreeNFT: only owner can attest");
 
-
+        mintOrGrow(attestation.recipient);
 
         return true;
     }
 
     function mintOrGrow(address to) internal {
         uint256 id = uint256(uint160(to));
-        if (_exists(id)) {
+        if (ownerOf(id) != address(0)) {
             growthStage[id]++;
         } else {
             mint(to);
